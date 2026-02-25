@@ -11,7 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.wetherprototype.ui.theme.WetherPrototypeTheme
+import com.example.designsystem.theme.WetherPrototypeTheme
+import com.example.wetherprototype.ui.screens.WeatherScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,8 +21,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             WetherPrototypeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    WeatherApp(
-                        name = "Android",
+                    WeatherScreen(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -30,18 +30,12 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun WeatherApp(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+
 
 @Preview(showBackground = true)
 @Composable
 fun WeatherAppPreview() {
     WetherPrototypeTheme {
-        WeatherApp("Android")
+        WeatherScreen()
     }
 }
