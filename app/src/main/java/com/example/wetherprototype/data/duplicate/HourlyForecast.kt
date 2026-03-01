@@ -1,4 +1,4 @@
-package com.example.wetherprototype.data
+package com.example.wetherprototype.data.duplicate
 
 import androidx.annotation.DrawableRes
 import com.example.designsystem.R
