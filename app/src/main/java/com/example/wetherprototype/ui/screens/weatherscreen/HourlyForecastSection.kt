@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -22,22 +23,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.example.designsystem.components.WHourlyForecastCard
-import com.example.designsystem.theme.WetherPrototypeTheme
-import com.example.wetherprototype.domain.model.HourlySection
+import com.example.designsystem.theme.WeatherPrototypeTheme
+import com.example.wetherprototype.domain.model.weather.HourlySection
 import com.example.wetherprototype.ui.preview.WeatherPreviewData
 
 @Composable
 fun HourlyForecastSection(
     hourlySection: HourlySection,
+    onDaySelected: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
 
@@ -62,7 +65,8 @@ fun HourlyForecastSection(
                 Text("Hourly Forecast")
                 LongBasicDropdownMenu(
                     selectedDay = hourlySection.selectedDay.toString(),
-                    days = hourlySection.availableDays.map { it.toString() }
+                    days = hourlySection.availableDays.map { it.toString() },
+                    onDaySelected = onDaySelected
                 )
             }
 
@@ -81,10 +85,13 @@ fun HourlyForecastSection(
 @Composable
 fun LongBasicDropdownMenu(
     selectedDay: String,
+    onDaySelected: (String) -> Unit,
     days: List<String>,
     modifier: Modifier = Modifier
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
+
+
 
     Box(
         modifier = Modifier
@@ -108,14 +115,35 @@ fun LongBasicDropdownMenu(
         }
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            shape = RoundedCornerShape(20.dp),
+//            tonalElevation = 8.dp,
+            containerColor = MaterialTheme.colorScheme.surface,
+            offset = DpOffset(x = 0.dp, y = 8.dp),
+            modifier = Modifier.width(200.dp)
         ) {
-            days.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = { /* Do something... */ }
-                )
-            }
+
+                Column()
+                {
+                    days.forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(option) },
+                            onClick = {
+                                onDaySelected(option)
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(
+                                    if (selectedDay == option)
+                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                                    else
+                                        Color.Transparent
+                                )
+                                .padding(12.dp),
+                        )
+                    }
+                }
         }
     }
 }
@@ -123,7 +151,7 @@ fun LongBasicDropdownMenu(
 @Preview(showBackground = true)
 @Composable
 fun HourlyForecastSectionPreview(){
-    WetherPrototypeTheme {
+    WeatherPrototypeTheme {
         HourlyForecastSection(
             hourlySection = WeatherPreviewData.weather.hourlySection
         )

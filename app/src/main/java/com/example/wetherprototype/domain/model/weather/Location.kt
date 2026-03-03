@@ -1,6 +1,8 @@
-package com.example.wetherprototype.domain.model
+package com.example.wetherprototype.domain.model.weather
 
 data class Location (
+    val latitude: Double,
+    val longitude: Double,
     val city: String,
     val country: String,
 )

@@ -1,4 +1,4 @@
-package com.example.wetherprototype.domain.model
+package com.example.wetherprototype.domain.model.weather
 
 import androidx.annotation.DrawableRes
 import java.time.LocalTime

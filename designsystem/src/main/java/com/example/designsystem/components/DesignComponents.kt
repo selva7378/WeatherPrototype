@@ -27,7 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.designsystem.theme.WetherPrototypeTheme
+import com.example.designsystem.theme.WeatherPrototypeTheme
 
 @Composable
 fun WDailyForecastCard(
@@ -191,7 +191,7 @@ fun HourlyForecast(
 @Preview(showBackground = true)
 @Composable
 fun WDailyForecastCardPreview() {
-    WetherPrototypeTheme() {
+    WeatherPrototypeTheme() {
         WDailyForecastCard(
             day = "Monday",
             iconRes = R.drawable.icon_rain,
@@ -205,7 +205,7 @@ fun WDailyForecastCardPreview() {
 @Preview(showBackground = true)
 @Composable
 fun WHourlyForecastCardPreview() {
-    WetherPrototypeTheme() {
+    WeatherPrototypeTheme() {
         WHourlyForecastCard(
             iconRes = R.drawable.icon_snow,
             time = "12:00",
@@ -218,7 +218,7 @@ fun WHourlyForecastCardPreview() {
 @Preview(showBackground = true)
 @Composable
 fun WHighlightCardPreview() {
-    WetherPrototypeTheme() {
+    WeatherPrototypeTheme() {
         WHighlightCard(
             name = "Humidity",
             value = "80%",
@@ -230,7 +230,7 @@ fun WHighlightCardPreview() {
 @Preview(showBackground = true)
 @Composable
 fun WCurrentWeatherCardPreview() {
-    WetherPrototypeTheme() {
+    WeatherPrototypeTheme() {
         WCurrentWeatherCard(
             backgroundImg = R.drawable.bg_today_small,
             iconRes = R.drawable.icon_snow,

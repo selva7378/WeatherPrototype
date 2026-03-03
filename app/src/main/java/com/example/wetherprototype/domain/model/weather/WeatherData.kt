@@ -1,6 +1,6 @@
-package com.example.wetherprototype.domain.model
+package com.example.wetherprototype.domain.model.weather
 
-data class WeatherUiModel(
+data class WeatherData(
     val location: Location,
     val current: CurrentWeather,
     val daily: List<DailyForecast>,

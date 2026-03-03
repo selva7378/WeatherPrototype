@@ -72,6 +72,15 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
+    // Retrofit 3.0.0 (Latest 2026 stable release)
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+
+    // Official Kotlin Serialization Converter (Square)
+    implementation("com.squareup.retrofit2:converter-kotlinx-serialization:3.0.0")
+
+    // Kotlin Serialization Library (Required for @Serializable)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
+
     implementation(project(":designsystem"))
 
 }

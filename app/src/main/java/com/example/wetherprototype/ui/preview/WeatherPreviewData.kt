@@ -1,20 +1,22 @@
 package com.example.wetherprototype.ui.preview
 
 import com.example.designsystem.R
-import com.example.wetherprototype.domain.model.CurrentWeather
-import com.example.wetherprototype.domain.model.DailyForecast
-import com.example.wetherprototype.domain.model.HourlyForecast
-import com.example.wetherprototype.domain.model.HourlySection
-import com.example.wetherprototype.domain.model.Location
-import com.example.wetherprototype.domain.model.WeatherUiModel
+import com.example.wetherprototype.domain.model.weather.CurrentWeather
+import com.example.wetherprototype.domain.model.weather.DailyForecast
+import com.example.wetherprototype.domain.model.weather.HourlyForecast
+import com.example.wetherprototype.domain.model.weather.HourlySection
+import com.example.wetherprototype.domain.model.weather.Location
+import com.example.wetherprototype.domain.model.weather.WeatherData
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 
 object WeatherPreviewData {
 
-    val weather = WeatherUiModel(
+    val weather = WeatherData(
         location = Location(
+            latitude = 2.3,
+            longitude = 3.4,
             city = "Berlin",
             country = "Germany"
         ),

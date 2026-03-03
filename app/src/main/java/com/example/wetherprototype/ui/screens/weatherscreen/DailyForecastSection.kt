@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.designsystem.components.WDailyForecastCard
-import com.example.wetherprototype.domain.model.DailyForecast
+import com.example.wetherprototype.domain.model.weather.DailyForecast
 import com.example.wetherprototype.ui.preview.WeatherPreviewData
 
 @Composable

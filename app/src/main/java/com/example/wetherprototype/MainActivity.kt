@@ -10,7 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.designsystem.theme.WetherPrototypeTheme
+import com.example.designsystem.theme.WeatherPrototypeTheme
 import com.example.wetherprototype.ui.screens.weatherscreen.WeatherScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            WetherPrototypeTheme {
+            WeatherPrototypeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     WeatherScreen(
                         modifier = Modifier.padding(innerPadding)
@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun WeatherAppPreview() {
-    WetherPrototypeTheme {
+    WeatherPrototypeTheme {
         WeatherScreen()
     }
 }

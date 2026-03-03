@@ -1,4 +1,4 @@
-package com.example.wetherprototype.domain.model
+package com.example.wetherprototype.domain.model.weather
 
 import java.time.DayOfWeek
 
