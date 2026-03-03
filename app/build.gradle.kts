@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.hilt.android.gradle.plugin)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
