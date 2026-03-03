@@ -1,5 +1,6 @@
 package com.example.wetherprototype.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wetherprototype.domain.model.units.PrecipitationUnit
@@ -25,7 +26,8 @@ import javax.inject.Inject
 data class WeatherSearchUiState(
     val query: String = "",
     val suggestions: List<Location> = emptyList(),
-    val error: String? = null
+    val error: String? = null,
+    val isLoading: Boolean = false
 )
 
 data class UnitsUiState(
@@ -35,7 +37,7 @@ data class UnitsUiState(
 )
 
 data class WeatherUiState(
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
     val data: WeatherData? = null,
     val error: String? = null
 )
@@ -51,16 +53,12 @@ class WeatherScreenViewModel @Inject constructor(
     private val _unitState = MutableStateFlow(UnitsUiState())
     val unitState = _unitState.asStateFlow()
 
-
-
-    private val _searchState =
-        MutableStateFlow(WeatherSearchUiState())
+    private val _searchState = MutableStateFlow(WeatherSearchUiState())
     val searchState = _searchState.asStateFlow()
 
     init {
         observeQueryChanges()
     }
-
 
     fun onTemperatureSelected(unit: TemperatureUnit) {
         _unitState.update {
@@ -84,6 +82,9 @@ class WeatherScreenViewModel @Inject constructor(
         _searchState.update {
             it.copy(query = newQuery)
         }
+        if (newQuery.isBlank()) {
+            _searchState.update { it.copy(suggestions = emptyList()) }
+        }
     }
 
     fun onDaySelected(day: String) {
@@ -106,25 +107,31 @@ class WeatherScreenViewModel @Inject constructor(
         }
     }
 
-
     private fun observeQueryChanges() {
         viewModelScope.launch {
             searchState
-                .map { it.query }              // observe only query
-                .debounce(500)                 // wait 500ms
+                .map { it.query }
+                .debounce(500)
                 .filter { it.isNotBlank() }
                 .distinctUntilChanged()
                 .collectLatest { query ->
-
-
-
-                    val results =
-                        locationRepository.searchLocation(query)
-
-                    _searchState.update {
-                        it.copy(
-                            suggestions = results
-                        )
+                    _searchState.update { it.copy(isLoading = true) }
+                    try {
+                        val results = locationRepository.searchLocation(query)
+                        Log.d("WeatherScreenViewModel", "results: ${results.size}")
+                        _searchState.update {
+                            it.copy(
+                                suggestions = results,
+                                isLoading = false
+                            )
+                        }
+                    } catch (e: Exception) {
+                        _searchState.update {
+                            it.copy(
+                                error = e.message,
+                                isLoading = false
+                            )
+                        }
                     }
                 }
         }
@@ -132,16 +139,29 @@ class WeatherScreenViewModel @Inject constructor(
 
     fun fetchWeather(location: Location) {
         viewModelScope.launch {
-            weatherRepository.getWeather(location.latitude,location.longitude )
-
-            _searchState.update {
-                it.copy(
-                    query = "",
-                    suggestions = emptyList()
-                )
+            _weather.update { it.copy(isLoading = true, error = null) }
+            try {
+                val data = weatherRepository.getWeather(location)
+                _weather.update {
+                    it.copy(
+                        data = data,
+                        isLoading = false
+                    )
+                }
+                _searchState.update {
+                    it.copy(
+                        query = location.city,
+                        suggestions = emptyList()
+                    )
+                }
+            } catch (e: Exception) {
+                _weather.update {
+                    it.copy(
+                        error = e.message,
+                        isLoading = false
+                    )
+                }
             }
         }
     }
 }
-
-

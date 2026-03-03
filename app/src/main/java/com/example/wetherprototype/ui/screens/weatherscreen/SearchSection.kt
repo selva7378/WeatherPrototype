@@ -86,23 +86,6 @@ fun SearchSection(
             onDismissRequest = { expanded = false }
         ) {
 
-//            if (state.isSearching) {
-//                DropdownMenuItem(
-//                    text = {
-//                        Row(
-//                            horizontalArrangement = Arrangement.Center,
-//                            modifier = Modifier.fillMaxWidth()
-//                        ) {
-//                            CircularProgressIndicator(
-//                                modifier = Modifier.size(20.dp),
-//                                strokeWidth = 2.dp
-//                            )
-//                        }
-//                    },
-//                    onClick = {}
-//                )
-//            }
-
             state.suggestions.forEach { location ->
                 DropdownMenuItem(
                     text = {
