@@ -1,8 +1,6 @@
 package com.example.wetherprototype.data.remote.dto.weather
 
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class WeatherResponse(
     val current: Current,
     val current_units: CurrentUnits,
