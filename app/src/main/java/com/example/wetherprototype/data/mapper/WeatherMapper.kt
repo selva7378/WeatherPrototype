@@ -28,8 +28,9 @@ fun WeatherResponse.toWeatherData(location: Location): WeatherData {
     val dailyForecasts = daily.time.indices.map { i ->
         DailyForecast(
             day = LocalDate.parse(daily.time[i]).dayOfWeek,
-            maxTemp = daily.temperature_2m_max[i].toInt(),
+            maxTemp = daily.temperature_2m_max[i].toInt() ,
             minTemp = daily.temperature_2m_min[i].toInt(),
+            units = daily_units.temperature_2m_max,
             iconRes = getWeatherIcon(daily.weather_code[i])
         )
     }
@@ -37,11 +38,12 @@ fun WeatherResponse.toWeatherData(location: Location): WeatherData {
     val hourlyForecasts = hourly.time.indices.map { i ->
         val dateTime = hourly.time[i]
         val date = LocalDate.parse(dateTime.substring(0, 10))
-        val time = LocalTime.parse(dateTime.substring(11, 16), DateTimeFormatter.ofPattern("HH:mm"))
+        val time = LocalTime.parse(dateTime.substring(11, 16), DateTimeFormatter.ofPattern("h:mm a"))
         
         date to HourlyForecast(
             time = time,
             temperature = hourly.temperature_2m[i].toInt(),
+            unitTemp = hourly_units.temperature_2m,
             weatherIcon = getWeatherIcon(hourly.weather_code[i])
         )
     }

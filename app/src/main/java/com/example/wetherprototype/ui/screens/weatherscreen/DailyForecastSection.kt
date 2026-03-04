@@ -28,8 +28,8 @@ fun DailyForecastSection(
                     WDailyForecastCard(
                         day = dailForecast.day.name,
                         iconRes = dailForecast.iconRes,
-                        highTemp = dailForecast.maxTemp.toString(),
-                        lowTemp = dailForecast.minTemp.toString(),
+                        highTemp = dailForecast.maxTemp.toString() + dailForecast.units.substring(0,1),
+                        lowTemp = dailForecast.minTemp.toString() + dailForecast.units.substring(0,1),
                         modifier = Modifier.weight(1f)
                     )
                 }
