@@ -10,8 +10,19 @@ import javax.inject.Inject
 class WeatherRepositoryImpl @Inject constructor(
     private val api: WeatherApi
 ) : WeatherRepository {
-    override suspend fun getWeather(location: Location): WeatherData {
-        val response = api.getWeatherData(location.latitude, location.longitude)
+    override suspend fun getWeather(
+        location: Location,
+        tempUnit: String,
+        windUnit: String,
+        precipitationUnit: String
+    ): WeatherData {
+        val response = api.getWeatherData(
+            lat = location.latitude,
+            lon = location.longitude,
+            temperature_unit = tempUnit,
+            windspeed_unit = windUnit,
+            precipitation_unit = precipitationUnit
+            )
         return response.toWeatherData(location)
     }
 }

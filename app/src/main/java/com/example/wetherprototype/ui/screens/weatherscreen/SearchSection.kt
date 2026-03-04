@@ -10,16 +10,12 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,18 +30,17 @@ import com.example.wetherprototype.ui.viewmodels.WeatherSearchUiState
 fun SearchSection(
     state: WeatherSearchUiState,
     onQueryChange: (String) -> Unit,
+    suggestionsDelete: () -> Unit,
     onLocationClick: (Location) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var expanded by remember { mutableStateOf(false) }
-
-    LaunchedEffect(state.suggestions) {
-        expanded = state.suggestions.isNotEmpty()
-    }
+    val expanded = state.suggestions.isNotEmpty()
 
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
+        onExpandedChange =  {
+            suggestionsDelete()
+        },
         modifier = modifier
 //            .fillMaxWidth()
             .padding(horizontal = 16.dp)
@@ -72,18 +67,26 @@ fun SearchSection(
                 .fillMaxWidth(),
             trailingIcon = {
                 if (expanded) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close search"
-
-                    )
+                    IconButton(
+                        onClick = {
+                            suggestionsDelete()
+                            onQueryChange("")
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Close search"
+                        )
+                    }
                 }
             }
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = {
+                suggestionsDelete()
+            }
         ) {
 
             state.suggestions.forEach { location ->
@@ -99,7 +102,7 @@ fun SearchSection(
                         }
                     },
                     onClick = {
-                        expanded = false
+                        suggestionsDelete()
                         onLocationClick(location)
                     }
                 )
@@ -116,6 +119,7 @@ fun SearchSectionPreview() {
             state = WeatherSearchUiState(),
             onQueryChange = {},
             onLocationClick = {},
+            suggestionsDelete = {},
             modifier = Modifier
         )
     }

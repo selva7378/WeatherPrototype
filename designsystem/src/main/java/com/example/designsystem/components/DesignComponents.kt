@@ -21,12 +21,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.designsystem.R
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.designsystem.R
 import com.example.designsystem.theme.WeatherPrototypeTheme
 
 @Composable
@@ -132,6 +132,7 @@ fun WHighlightCard(
 fun WCurrentWeatherCard(
     @DrawableRes backgroundImg: Int,
     @DrawableRes iconRes: Int,
+    tempUnit: String,
     temp: String,
     place: String,
     dayAndDate: String,
@@ -170,7 +171,7 @@ fun WCurrentWeatherCard(
                         contentDescription = null
                         )
                     Text(
-                        text = temp,
+                        text = temp + tempUnit.substring(0, 1),
                         style = MaterialTheme.typography.displayLarge.copy(
                             fontStyle = FontStyle.Italic
                         )
@@ -234,7 +235,8 @@ fun WCurrentWeatherCardPreview() {
         WCurrentWeatherCard(
             backgroundImg = R.drawable.bg_today_small,
             iconRes = R.drawable.icon_snow,
-            temp = "20°",
+            temp = "20",
+            tempUnit = "°C",
             place = "New York",
             dayAndDate = "Tuesday, Aug 5, 2025",
             modifier = Modifier,

@@ -12,6 +12,10 @@ data class CurrentWeather(
     val windSpeed: Double,
     val feelsLike: Int,
     val precipitation: Int,
+    val tempUnit: String,
+    val windUnit: String,
+    val humidityUnit: String,
+    val precipitationUnit: String,
     @DrawableRes val weatherIcon: Int,
 )
 

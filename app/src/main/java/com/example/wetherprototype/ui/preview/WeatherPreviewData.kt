@@ -27,7 +27,11 @@ object WeatherPreviewData {
             humidity = 46,
             windSpeed = 14.0,
             precipitation = 0,
-            weatherIcon = R.drawable.icon_drizzle
+            weatherIcon = R.drawable.icon_drizzle,
+            tempUnit = "°C",
+            windUnit = "Km/h",
+            humidityUnit = "%",
+            precipitationUnit = "mm",
         ),
         daily = listOf(
             DailyForecast(DayOfWeek.TUESDAY, 20, 14, "°C", R.drawable.icon_fog),
