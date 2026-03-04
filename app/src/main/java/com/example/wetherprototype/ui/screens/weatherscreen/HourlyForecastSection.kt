@@ -74,7 +74,7 @@ fun HourlyForecastSection(
             WHourlyForecastCard(
                 iconRes = hourlyForecast.weatherIcon,
                 time = hourlyForecast.time.toString(),
-                temp = hourlyForecast.temperature.toString(),
+                temp = hourlyForecast.temperature.toString() + hourlyForecast.unitTemp.substring(0,1),
                 modifier = Modifier.wrapContentSize()
             )
         }

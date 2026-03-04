@@ -7,5 +7,6 @@ data class DailyForecast(
     val day: DayOfWeek,       //for mon, tue, etc.
     val maxTemp: Int,
     val minTemp: Int,
+    val units: String,
     @DrawableRes val iconRes: Int
 )
