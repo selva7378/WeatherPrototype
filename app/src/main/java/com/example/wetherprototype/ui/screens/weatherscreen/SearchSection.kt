@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.DropdownMenuItem
@@ -16,8 +17,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.designsystem.theme.WeatherPrototypeTheme
@@ -34,15 +41,18 @@ fun SearchSection(
     onLocationClick: (Location) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val expanded = state.suggestions.isNotEmpty()
+    var expanded by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(state.suggestions) {
+        expanded = state.suggestions.isNotEmpty()
+    }
+
 
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange =  {
-            suggestionsDelete()
-        },
+        onExpandedChange = { expanded = !expanded },
         modifier = modifier
-//            .fillMaxWidth()
             .padding(horizontal = 16.dp)
     ) {
 
@@ -60,15 +70,21 @@ fun SearchSection(
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
             ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                }
+            ),
             placeholder = { Text("Search for a place...") },
             singleLine = true,
             modifier = Modifier
                 .menuAnchor() // VERY IMPORTANT
                 .fillMaxWidth(),
             trailingIcon = {
-                if (expanded) {
+                if (state.query.isNotBlank()) {
                     IconButton(
                         onClick = {
+                            expanded = false
                             suggestionsDelete()
                             onQueryChange("")
                         }
@@ -83,9 +99,10 @@ fun SearchSection(
         )
 
         ExposedDropdownMenu(
-            expanded = expanded,
+            expanded = if (state.suggestions.isNotEmpty()) expanded else false,
             onDismissRequest = {
-                suggestionsDelete()
+                expanded = false
+                focusManager.clearFocus()
             }
         ) {
 
@@ -102,7 +119,10 @@ fun SearchSection(
                         }
                     },
                     onClick = {
+                        expanded = false
                         suggestionsDelete()
+                        onQueryChange("")
+                        focusManager.clearFocus()
                         onLocationClick(location)
                     }
                 )

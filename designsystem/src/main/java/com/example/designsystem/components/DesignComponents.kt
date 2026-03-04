@@ -96,7 +96,10 @@ fun WHourlyForecastCard(
                 text = time,
                 modifier = Modifier.weight(1f)
             )
-            Text(temp)
+            Text(
+                text = temp,
+                modifier = Modifier.padding(8.dp)
+            )
         }
     }
 }

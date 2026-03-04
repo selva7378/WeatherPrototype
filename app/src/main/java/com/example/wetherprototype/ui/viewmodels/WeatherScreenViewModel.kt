@@ -165,7 +165,7 @@ class WeatherScreenViewModel @Inject constructor(
                 }
                 _searchState.update {
                     it.copy(
-                        query = location.city,
+//                        query = location.city,
                         suggestions = emptyList()
                     )
                 }

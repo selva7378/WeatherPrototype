@@ -38,7 +38,6 @@ fun WeatherScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
 
-        // --- 1. Header & Search (Always Visible) ---
         item {
             HeaderSection(
                 unitsState = unitState,
@@ -58,12 +57,11 @@ fun WeatherScreen(
             )
         }
 
-        // --- 2. Conditional Weather Content ---
         when {
             weatherData.isLoading -> {
                 item {
                     Box(Modifier.fillParentMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator() // Show spinner
+                        CircularProgressIndicator()
                     }
                 }
             }
