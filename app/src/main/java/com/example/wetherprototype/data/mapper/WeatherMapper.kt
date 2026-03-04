@@ -38,8 +38,8 @@ fun WeatherResponse.toWeatherData(location: Location): WeatherData {
     val hourlyForecasts = hourly.time.indices.map { i ->
         val dateTime = hourly.time[i]
         val date = LocalDate.parse(dateTime.substring(0, 10))
-        val time = LocalTime.parse(dateTime.substring(11, 16), DateTimeFormatter.ofPattern("h:mm a"))
-        
+        val time = LocalTime.parse(dateTime.substring(11, 16), DateTimeFormatter.ofPattern("HH:mm"))
+
         date to HourlyForecast(
             time = time,
             temperature = hourly.temperature_2m[i].toInt(),
@@ -60,7 +60,11 @@ fun WeatherResponse.toWeatherData(location: Location): WeatherData {
         windSpeed = current.wind_speed_10m,
         feelsLike = current.apparent_temperature.toInt(),
         precipitation = current.precipitation.toInt(),
-        weatherIcon = getWeatherIcon(current.weather_code)
+        weatherIcon = getWeatherIcon(current.weather_code),
+        tempUnit = current_units.temperature_2m,
+        humidityUnit = current_units.relative_humidity_2m,
+        windUnit = current_units.wind_speed_10m,
+        precipitationUnit = current_units.precipitation,
     )
 
     return WeatherData(

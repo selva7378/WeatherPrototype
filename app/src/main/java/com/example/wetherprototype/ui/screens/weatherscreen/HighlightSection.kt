@@ -15,6 +15,10 @@ fun HighlightsSection(
     humidity: String,
     wind: String,
     precipitation: String,
+    temperatureUnit: String,
+    windUnit: String,
+    precipitationUnit: String,
+    humidityUnit: String,
     modifier: Modifier = Modifier
 ) {
 
@@ -24,13 +28,29 @@ fun HighlightsSection(
     ) {
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            WHighlightCard("Feels Like", feelsLike, Modifier.weight(1f))
-            WHighlightCard("Humidity", humidity, Modifier.weight(1f))
+            WHighlightCard(
+                "Feels Like",
+                feelsLike + temperatureUnit.substring(0,1),
+                Modifier.weight(1f)
+            )
+            WHighlightCard(
+                "Humidity",
+                humidity + humidityUnit,
+                Modifier.weight(1f)
+            )
         }
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            WHighlightCard("Wind", wind, Modifier.weight(1f))
-            WHighlightCard("Precipitation", precipitation, Modifier.weight(1f))
+            WHighlightCard(
+                "Wind",
+                wind + windUnit,
+                Modifier.weight(1f)
+            )
+            WHighlightCard(
+                "Precipitation",
+                precipitation + precipitationUnit,
+                Modifier.weight(1f)
+            )
         }
     }
 }
@@ -40,9 +60,14 @@ fun HighlightsSection(
 @Composable
 fun HighlightsSectionPreview() {
     HighlightsSection(
-        feelsLike = "20°",
-        humidity = "80%",
-        wind = "10 Km/h",
-        precipitation = "20 mm"
+        feelsLike = "20",
+        humidity = "80",
+        wind = "10",
+        precipitation = "20",
+        temperatureUnit = "°C",
+        windUnit = "Km/h",
+        precipitationUnit = "mm",
+        humidityUnit = "%",
+        modifier = Modifier,
     )
 }

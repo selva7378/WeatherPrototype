@@ -7,6 +7,5 @@ data class HourlyForecast(
     val time: LocalTime,      // For "3 PM"
     val temperature: Int,
     val unitTemp: String,
-//    val unitTime: String,
     @DrawableRes val weatherIcon: Int
 )

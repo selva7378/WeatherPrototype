@@ -38,7 +38,6 @@ fun WeatherScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
 
-        // --- 1. Header & Search (Always Visible) ---
         item {
             HeaderSection(
                 unitsState = unitState,
@@ -53,16 +52,16 @@ fun WeatherScreen(
             SearchSection(
                 state = searchData,
                 onQueryChange = weatherScreenViewModel::onQueryChange,
+                suggestionsDelete = weatherScreenViewModel::deleteSuggestion,
                 onLocationClick = weatherScreenViewModel::fetchWeather
             )
         }
 
-        // --- 2. Conditional Weather Content ---
         when {
             weatherData.isLoading -> {
                 item {
                     Box(Modifier.fillParentMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator() // Show spinner
+                        CircularProgressIndicator()
                     }
                 }
             }
@@ -80,7 +79,8 @@ fun WeatherScreen(
                         iconRes = data.current.weatherIcon,
                         temp = data.current.temperature.toString(),
                         place = data.location.formatLocation(),
-                        dayAndDate = data.current.date.toFullDateString()
+                        dayAndDate = data.current.date.toFullDateString(),
+                        tempUnit = data.current.tempUnit
                     )
                 }
 
@@ -89,7 +89,12 @@ fun WeatherScreen(
                         feelsLike = data.current.feelsLike.toString(),
                         humidity = data.current.humidity.toString(),
                         wind = data.current.windSpeed.toString(),
-                        precipitation = data.current.precipitation.toString()
+                        precipitation = data.current.precipitation.toString(),
+                        temperatureUnit = data.current.tempUnit,
+                        windUnit = data.current.windUnit,
+                        precipitationUnit = data.current.precipitationUnit,
+                        humidityUnit = data.current.humidityUnit,
+                        modifier = Modifier,
                     )
                 }
 

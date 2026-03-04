@@ -36,6 +36,8 @@ import com.example.designsystem.components.WHourlyForecastCard
 import com.example.designsystem.theme.WeatherPrototypeTheme
 import com.example.wetherprototype.domain.model.weather.HourlySection
 import com.example.wetherprototype.ui.preview.WeatherPreviewData
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun HourlyForecastSection(
@@ -73,7 +75,9 @@ fun HourlyForecastSection(
         hourlySection.hourlyByDay[hourlySection.selectedDay]?.forEach { hourlyForecast ->
             WHourlyForecastCard(
                 iconRes = hourlyForecast.weatherIcon,
-                time = hourlyForecast.time.toString(),
+                time = hourlyForecast.time.format(
+                    DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH)
+                ),
                 temp = hourlyForecast.temperature.toString() + hourlyForecast.unitTemp.substring(0,1),
                 modifier = Modifier.wrapContentSize()
             )

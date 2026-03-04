@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
+import java.util.Locale.getDefault
 import javax.inject.Inject
 
 data class WeatherSearchUiState(
@@ -64,18 +65,21 @@ class WeatherScreenViewModel @Inject constructor(
         _unitState.update {
             it.copy(temperatureUnit = unit)
         }
+        fetchWeather(_weather.value.data?.location ?: return)
     }
 
     fun onWindSelected(unit: WindUnit) {
         _unitState.update {
             it.copy(windUnit = unit)
         }
+        fetchWeather(_weather.value.data?.location ?: return)
     }
 
     fun onPrecipitationSelected(unit: PrecipitationUnit) {
         _unitState.update {
             it.copy(precipitationUnit = unit)
         }
+        fetchWeather(_weather.value.data?.location ?: return)
     }
 
     fun onQueryChange(newQuery: String) {
@@ -137,11 +141,22 @@ class WeatherScreenViewModel @Inject constructor(
         }
     }
 
+    fun deleteSuggestion(){
+        _searchState.update {
+            it.copy(suggestions = emptyList())
+        }
+    }
+
     fun fetchWeather(location: Location) {
         viewModelScope.launch {
             _weather.update { it.copy(isLoading = true, error = null) }
             try {
-                val data = weatherRepository.getWeather(location)
+                val data = weatherRepository.getWeather(
+                    location,
+                    _unitState.value.temperatureUnit.name.lowercase(getDefault()),
+                    _unitState.value.windUnit.name.lowercase(getDefault()),
+                    _unitState.value.precipitationUnit.name.lowercase(getDefault())
+                )
                 _weather.update {
                     it.copy(
                         data = data,
@@ -150,7 +165,7 @@ class WeatherScreenViewModel @Inject constructor(
                 }
                 _searchState.update {
                     it.copy(
-                        query = location.city,
+//                        query = location.city,
                         suggestions = emptyList()
                     )
                 }
