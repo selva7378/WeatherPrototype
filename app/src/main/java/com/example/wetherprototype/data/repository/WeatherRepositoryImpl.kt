@@ -5,6 +5,7 @@ import com.example.wetherprototype.data.remote.api.WeatherApi
 import com.example.wetherprototype.domain.model.weather.Location
 import com.example.wetherprototype.domain.model.weather.WeatherData
 import com.example.wetherprototype.domain.repository.WeatherRepository
+import com.example.wetherprototype.domain.util.Result
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
@@ -15,14 +16,18 @@ class WeatherRepositoryImpl @Inject constructor(
         tempUnit: String,
         windUnit: String,
         precipitationUnit: String
-    ): WeatherData {
-        val response = api.getWeatherData(
-            lat = location.latitude,
-            lon = location.longitude,
-            temperature_unit = tempUnit,
-            windspeed_unit = windUnit,
-            precipitation_unit = precipitationUnit
+    ): Result<WeatherData> {
+        return try {
+            val response = api.getWeatherData(
+                lat = location.latitude,
+                lon = location.longitude,
+                temperature_unit = tempUnit,
+                windspeed_unit = windUnit,
+                precipitation_unit = precipitationUnit
             )
-        return response.toWeatherData(location)
+            Result.Success(response.toWeatherData(location))
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 }

@@ -6,18 +6,20 @@ import com.example.wetherprototype.data.remote.api.GeocodingApi
 import com.example.wetherprototype.domain.model.weather.Location
 import com.example.wetherprototype.domain.repository.LocationRepository
 import javax.inject.Inject
+import com.example.wetherprototype.domain.util.Result
+
 
 class LocationRepositoryImpl @Inject constructor(
     private val api: GeocodingApi
 ) : LocationRepository {
 
-    override suspend fun searchLocation(query: String): List<Location> {
+    override suspend fun searchLocation(query: String): Result<List<Location>> {
         return try {
-            Log.e("LocationRepositoryImpl", "searchLocation: $query")
-            api.searchLocation(name = query).toLocationList()
+            val locations = api.searchLocation(name = query).toLocationList()
+            Result.Success(locations)
         } catch (e: Exception) {
             Log.e("LocationRepositoryImpl", "errorLocation: ${e.message}")
-            emptyList()
+            Result.Error(e)
         }
     }
 }

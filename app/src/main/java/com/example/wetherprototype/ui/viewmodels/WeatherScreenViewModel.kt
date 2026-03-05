@@ -1,6 +1,5 @@
 package com.example.wetherprototype.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wetherprototype.domain.model.units.PrecipitationUnit
@@ -10,6 +9,7 @@ import com.example.wetherprototype.domain.model.weather.Location
 import com.example.wetherprototype.domain.model.weather.WeatherData
 import com.example.wetherprototype.domain.repository.LocationRepository
 import com.example.wetherprototype.domain.repository.WeatherRepository
+import com.example.wetherprototype.domain.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
-import java.util.Locale.getDefault
 import javax.inject.Inject
 
 data class WeatherSearchUiState(
@@ -120,26 +119,27 @@ class WeatherScreenViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .collectLatest { query ->
                     _searchState.update { it.copy(isLoading = true) }
-                    try {
-                        val results = locationRepository.searchLocation(query)
-                        Log.d("WeatherScreenViewModel", "results: ${results.size}")
-                        _searchState.update {
-                            it.copy(
-                                suggestions = results,
-                                isLoading = false
-                            )
+
+                    when (val result = locationRepository.searchLocation(query)) {
+                        is Result.Success -> {
+                            _searchState.update {
+                                it.copy(suggestions = result.data, isLoading = false)
+                            }
                         }
-                    } catch (e: Exception) {
-                        _searchState.update {
-                            it.copy(
-                                error = e.message,
-                                isLoading = false
-                            )
+                        is Result.Error -> {
+                            _searchState.update {
+                                it.copy(
+                                    error = result.exception.message,
+                                    isLoading = false
+                                )
+                            }
                         }
+                        Result.Loading -> {}
                     }
                 }
         }
     }
+
 
     fun deleteSuggestion(){
         _searchState.update {
@@ -150,33 +150,32 @@ class WeatherScreenViewModel @Inject constructor(
     fun fetchWeather(location: Location) {
         viewModelScope.launch {
             _weather.update { it.copy(isLoading = true, error = null) }
-            try {
-                val data = weatherRepository.getWeather(
-                    location,
-                    _unitState.value.temperatureUnit.name.lowercase(getDefault()),
-                    _unitState.value.windUnit.name.lowercase(getDefault()),
-                    _unitState.value.precipitationUnit.name.lowercase(getDefault())
-                )
-                _weather.update {
-                    it.copy(
-                        data = data,
-                        isLoading = false
-                    )
+
+            when (val result = weatherRepository.getWeather(
+                location,
+                _unitState.value.temperatureUnit.name.lowercase(),
+                _unitState.value.windUnit.name.lowercase(),
+                _unitState.value.precipitationUnit.name.lowercase()
+            )) {
+                is Result.Success -> {
+                    _weather.update {
+                        it.copy(data = result.data, isLoading = false)
+                    }
+                    _searchState.update {
+                        it.copy( suggestions = emptyList())
+                    }
                 }
-                _searchState.update {
-                    it.copy(
-//                        query = location.city,
-                        suggestions = emptyList()
-                    )
+                is Result.Error -> {
+                    _weather.update {
+                        it.copy(
+                            error = result.exception.message ?: "Something went wrong",
+                            isLoading = false
+                        )
+                    }
                 }
-            } catch (e: Exception) {
-                _weather.update {
-                    it.copy(
-                        error = e.message,
-                        isLoading = false
-                    )
-                }
+                Result.Loading -> { /* not used here */ }
             }
         }
     }
+
 }

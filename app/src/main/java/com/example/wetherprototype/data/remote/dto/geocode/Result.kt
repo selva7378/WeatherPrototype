@@ -2,7 +2,6 @@ package com.example.wetherprototype.data.remote.dto.geocode
 
 import kotlinx.serialization.Serializable
 
-@Serializable
 data class Result(
     val admin1: String? = null,
     val admin1_id: Int? = null,
